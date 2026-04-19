@@ -13,6 +13,7 @@
     margin: 0;
     min-height: 100dvh;
     min-height: 100vh;
+    position: relative;
     font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: #3a0a2e;
     display: flex;
@@ -330,6 +331,49 @@
     border-bottom-color: rgba(216, 27, 122, 0.75);
     color: #d81b7a;
   }
+
+  .edit-wish {
+    margin: 12px 0 0;
+    text-align: center;
+  }
+
+  .edit-wish a {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: clamp(0.72rem, 2.8vw, 0.82rem);
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    background: linear-gradient(120deg, #ff3d8f 0%, #e040fb 100%);
+    box-shadow: 0 4px 16px rgba(255, 60, 140, 0.35);
+  }
+
+  .edit-wish a:hover { filter: brightness(1.05); }
+
+  /* Pixel rabbit — corner mascot */
+  .pixel-rabbit {
+    position: fixed;
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: min(104px, 26vw);
+    z-index: 50;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 14px rgba(180, 80, 140, 0.35));
+    opacity: 0.95;
+  }
+
+  .pixel-rabbit svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    shape-rendering: crispEdges;
+    image-rendering: pixelated;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pixel-rabbit { opacity: 1; }
+  }
 </style>
 </head>
 <body>
@@ -339,6 +383,7 @@
     <h1>Блондинка Wish Casino ✨</h1>
     <p class="sub">Три в ряд — и вселенная на твоей стороне</p>
     <p class="garage-nav"><a href="vikegart/">Гараж — вишлист vikegart</a> · <a href="scooby-zombie-island.html">Скуби-Ду: остров зомби — викторина</a></p>
+    <p class="edit-wish"><a href="blonde-wishlist-edit.html">Редактировать вишлист</a></p>
   </header>
 
   <div class="glass" id="machine">
@@ -356,9 +401,34 @@
 
 <div id="fx-layer" aria-hidden="true"></div>
 
+<div class="pixel-rabbit" aria-hidden="true">
+  <svg viewBox="0 0 14 16" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="rabbitTitle">
+    <title id="rabbitTitle">Пиксельный кролик</title>
+    <!-- Sitting bunny, pink ears, white fluff -->
+    <rect width="14" height="16" fill="transparent"/>
+    <rect x="4" y="1" width="2" height="5" fill="#ffb7d5"/>
+    <rect x="8" y="1" width="2" height="5" fill="#ffb7d5"/>
+    <rect x="5" y="2" width="1" height="3" fill="#ff8cc6"/>
+    <rect x="9" y="2" width="1" height="3" fill="#ff8cc6"/>
+    <rect x="4" y="6" width="6" height="5" fill="#faf8ff"/>
+    <rect x="3" y="8" width="8" height="4" fill="#faf8ff"/>
+    <rect x="2" y="10" width="2" height="3" fill="#faf8ff"/>
+    <rect x="10" y="10" width="2" height="3" fill="#faf8ff"/>
+    <rect x="4" y="11" width="2" height="2" fill="#f5f0ff"/>
+    <rect x="8" y="11" width="2" height="2" fill="#f5f0ff"/>
+    <rect x="5" y="12" width="4" height="1" fill="#ffd6ea"/>
+    <rect x="6" y="8" width="1" height="1" fill="#2a2030"/>
+    <rect x="9" y="8" width="1" height="1" fill="#2a2030"/>
+    <rect x="7" y="10" width="1" height="1" fill="#ff7eb3"/>
+    <rect x="3" y="13" width="3" height="2" fill="#faf8ff"/>
+    <rect x="8" y="13" width="3" height="2" fill="#faf8ff"/>
+  </svg>
+</div>
+
 <script>
 (function () {
-  const items = [
+  const BLONDE_STORAGE = "wishlist_blonde_notes_v1";
+  const DEFAULT_ITEMS = [
     "Tom Ford Lost Cherry",
     "Gentle Monster очки",
     "Onitsuka Tiger розовые",
@@ -375,6 +445,24 @@
     "F1 мерч",
     "Квест 💀"
   ];
+
+  function loadBlondeItems() {
+    try {
+      const raw = localStorage.getItem(BLONDE_STORAGE);
+      if (!raw) return DEFAULT_ITEMS.slice();
+      const a = JSON.parse(raw);
+      if (!Array.isArray(a)) return DEFAULT_ITEMS.slice();
+      const out = [];
+      for (let i = 0; i < a.length; i++) {
+        if (typeof a[i] === "string" && a[i].trim()) out.push(a[i].trim());
+      }
+      return out.length ? out : DEFAULT_ITEMS.slice();
+    } catch (e) {
+      return DEFAULT_ITEMS.slice();
+    }
+  }
+
+  let items = loadBlondeItems();
 
   const EMOJI_BURST = ["🎉", "✨", "💖", "🌟", "💫", "🥳", "🎊", "💎", "👑", "🔥", "💘", "🌸", "⭐", "🦋", "💝"];
 
@@ -458,6 +546,10 @@
     const t = PHRASES_MISS[phraseIxMiss];
     phraseIxMiss = (phraseIxMiss + 1) % PHRASES_MISS.length;
     return t;
+  }
+
+  function refreshItemsFromStorage() {
+    items = loadBlondeItems();
   }
 
   const strips = [0, 1, 2].map((i) => document.getElementById("strip" + i));
@@ -647,6 +739,12 @@
   }
 
   spinBtn.addEventListener("click", spin);
+
+  window.addEventListener("storage", (ev) => {
+    if (ev.key === BLONDE_STORAGE) refreshItemsFromStorage();
+  });
+  window.addEventListener("focus", refreshItemsFromStorage);
+  window.addEventListener("pageshow", refreshItemsFromStorage);
 
   // Initial idle display: land on last row without motion blur
   strips.forEach((strip, i) => {

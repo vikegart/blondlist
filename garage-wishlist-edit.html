@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d1118">
+<title>Гараж — вишлист</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    min-height: 100vh;
+    font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #e8ecf4;
+    padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background:
+      radial-gradient(100% 60% at 50% 0%, rgba(0, 220, 255, 0.1), transparent 55%),
+      linear-gradient(180deg, #0d1118 0%, #121820 100%);
+  }
+
+  .wrap {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .top h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(110deg, #5cffe8 0%, #ff4fd8 50%, #7ecbff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .top a {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #7ee8ff;
+    text-decoration: none;
+  }
+
+  .hint {
+    margin: 0 0 14px;
+    font-size: 0.82rem;
+    color: rgba(200, 210, 230, 0.55);
+    line-height: 1.35;
+  }
+
+  .list-shell {
+    background: linear-gradient(145deg, rgba(30, 36, 48, 0.9), rgba(18, 22, 30, 0.95));
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(100, 170, 220, 0.2);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  }
+
+  .swipe-host {
+    border-bottom: 1px solid rgba(80, 120, 160, 0.2);
+  }
+  .swipe-host:last-child { border-bottom: none; }
+
+  .swipe-row {
+    position: relative;
+    overflow: hidden;
+    min-height: 48px;
+    background: transparent;
+  }
+
+  .swipe-delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 88px;
+    border: none;
+    margin: 0;
+    padding: 0 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    background: #ff3b30;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swipe-panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: linear-gradient(145deg, rgba(30, 36, 48, 0.98), rgba(22, 26, 36, 0.98));
+    will-change: transform;
+    touch-action: pan-y;
+  }
+
+  .swipe-text {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.98rem;
+    line-height: 1.35;
+    word-wrap: break-word;
+    color: #f2f6ff;
+  }
+
+  .empty {
+    padding: 28px 16px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: rgba(180, 195, 220, 0.45);
+  }
+
+  .composer {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .composer input {
+    flex: 1;
+    min-width: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(100, 170, 220, 0.25);
+    padding: 12px 14px;
+    font-size: 1rem;
+    background: rgba(10, 14, 22, 0.65);
+    color: #e8ecf4;
+    outline: none;
+  }
+
+  .composer input::placeholder { color: rgba(180, 195, 220, 0.4); }
+
+  .composer input:focus {
+    border-color: rgba(0, 245, 255, 0.45);
+    box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.12);
+  }
+
+  .composer button {
+    flex-shrink: 0;
+    border: none;
+    border-radius: 12px;
+    padding: 0 18px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0a0c10;
+    cursor: pointer;
+    background: linear-gradient(120deg, #5cffe8 0%, #7ecbff 100%);
+    box-shadow: 0 4px 16px rgba(0, 245, 255, 0.25);
+  }
+
+  .composer button:active { transform: scale(0.98); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .swipe-panel { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Вишлист гаража</h1>
+    <a href="vikegart/">Готово</a>
+  </div>
+  <p class="hint">Свайп влево — удалить. Добавление только названием (карточка на сайте гаража будет простой).</p>
+  <div class="list-shell" id="listShell"></div>
+  <form class="composer" id="addForm" autocomplete="off">
+    <input type="text" id="newLine" maxlength="200" placeholder="Новый пункт…" aria-label="New garage wish item">
+    <button type="submit">Добавить</button>
+  </form>
+</div>
+
+<script src="wishlist-garage-shared.js"></script>
+<script>
+(function () {
+  var DELETE_W = 88;
+
+  function titleOf(entry) {
+    return entry && typeof entry.title === "string" ? entry.title : "";
+  }
+
+  var items = loadGarageWishlist();
+  var shell = document.getElementById("listShell");
+  var form = document.getElementById("addForm");
+  var input = document.getElementById("newLine");
+
+  function clamp(n, lo, hi) {
+    return Math.max(lo, Math.min(hi, n));
+  }
+
+  function closeAllExcept(skipEl) {
+    var panels = shell.querySelectorAll(".swipe-panel");
+    for (var i = 0; i < panels.length; i++) {
+      if (panels[i] === skipEl) continue;
+      panels[i].style.transition = "transform 0.22s ease";
+      panels[i].style.transform = "translateX(0)";
+    }
+  }
+
+  function render() {
+    shell.innerHTML = "";
+    if (!items.length) {
+      var e = document.createElement("div");
+      e.className = "empty";
+      e.textContent = "Список пуст — добавь первый пункт.";
+      shell.appendChild(e);
+      return;
+    }
+    for (var i = 0; i < items.length; i++) {
+      (function (index) {
+        var host = document.createElement("div");
+        host.className = "swipe-host";
+
+        var row = document.createElement("div");
+        row.className = "swipe-row";
+
+        var delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "swipe-delete";
+        delBtn.textContent = "Удалить";
+
+        var panel = document.createElement("div");
+        panel.className = "swipe-panel";
+
+        var txt = document.createElement("div");
+        txt.className = "swipe-text";
+        txt.textContent = titleOf(items[index]);
+
+        panel.appendChild(txt);
+        row.appendChild(delBtn);
+        row.appendChild(panel);
+
+        var open = false;
+
+        function setX(dx) {
+          var v = clamp(dx, -DELETE_W, 0);
+          panel.style.transition = "none";
+          panel.style.transform = "translateX(" + v + "px)";
+        }
+
+        function snap(dx) {
+          panel.style.transition = "transform 0.22s ease";
+          if (dx < -DELETE_W * 0.35) {
+            panel.style.transform = "translateX(-" + DELETE_W + "px)";
+            open = true;
+          } else {
+            panel.style.transform = "translateX(0)";
+            open = false;
+          }
+        }
+
+        delBtn.addEventListener("click", function () {
+          items.splice(index, 1);
+          saveGarageWishlist(items);
+          render();
+        });
+
+        var startX = 0;
+        var cur = 0;
+        var tracking = false;
+
+        panel.addEventListener("pointerdown", function (ev) {
+          if (ev.button !== undefined && ev.button !== 0) return;
+          tracking = true;
+          panel.setPointerCapture(ev.pointerId);
+          startX = ev.clientX;
+          cur = open ? -DELETE_W : 0;
+          closeAllExcept(panel);
+          panel.style.transition = "none";
+        });
+
+        panel.addEventListener("pointermove", function (ev) {
+          if (!tracking) return;
+          var dx = ev.clientX - startX + cur;
+          setX(dx);
+        });
+
+        panel.addEventListener("pointerup", function (ev) {
+          if (!tracking) return;
+          tracking = false;
+          try { panel.releasePointerCapture(ev.pointerId); } catch (err) {}
+          var dx = ev.clientX - startX + cur;
+          snap(dx);
+        });
+
+        panel.addEventListener("pointercancel", function () {
+          tracking = false;
+          snap(open ? -DELETE_W : 0);
+        });
+
+        host.appendChild(row);
+        shell.appendChild(host);
+      })(i);
+    }
+  }
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var v = input.value.trim();
+    if (!v) return;
+    items.push({ title: v });
+    saveGarageWishlist(items);
+    input.value = "";
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

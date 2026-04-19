@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ff5c9a">
+<title>Вишлист — редактирование</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    min-height: 100vh;
+    font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1c1c1e;
+    padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background:
+      radial-gradient(120% 80% at 10% 0%, rgba(255, 182, 225, 0.5), transparent 50%),
+      linear-gradient(165deg, #f2f2f7 0%, #ffe8f4 50%, #f3e8ff 100%);
+  }
+
+  .wrap {
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .top h1 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .top a {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ff2d8b;
+    text-decoration: none;
+  }
+
+  .hint {
+    margin: 0 0 14px;
+    font-size: 0.82rem;
+    color: rgba(60, 60, 67, 0.55);
+    line-height: 1.35;
+  }
+
+  /* Apple Notes–style grouped list */
+  .list-shell {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 4px 16px rgba(180, 100, 160, 0.08);
+  }
+
+  .swipe-host {
+    border-bottom: 0.5px solid rgba(60, 60, 67, 0.18);
+  }
+  .swipe-host:last-child { border-bottom: none; }
+
+  .swipe-row {
+    position: relative;
+    overflow: hidden;
+    min-height: 48px;
+    background: #fff;
+  }
+
+  .swipe-delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 88px;
+    border: none;
+    margin: 0;
+    padding: 0 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    background: #ff3b30;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swipe-panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #fff;
+    will-change: transform;
+    touch-action: pan-y;
+  }
+
+  .swipe-text {
+    flex: 1;
+    min-width: 0;
+    font-size: 1rem;
+    line-height: 1.35;
+    word-wrap: break-word;
+  }
+
+  .empty {
+    padding: 28px 16px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: rgba(60, 60, 67, 0.45);
+  }
+
+  .composer {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .composer input {
+    flex: 1;
+    min-width: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(60, 60, 67, 0.12);
+    padding: 12px 14px;
+    font-size: 1rem;
+    background: #fff;
+    outline: none;
+  }
+
+  .composer input:focus {
+    border-color: rgba(255, 45, 139, 0.45);
+    box-shadow: 0 0 0 3px rgba(255, 45, 139, 0.12);
+  }
+
+  .composer button {
+    flex-shrink: 0;
+    border: none;
+    border-radius: 12px;
+    padding: 0 18px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(120deg, #ff3d8f 0%, #e040fb 100%);
+    box-shadow: 0 4px 14px rgba(255, 60, 140, 0.35);
+  }
+
+  .composer button:active { transform: scale(0.98); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .swipe-panel { transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Вишлист</h1>
+    <a href="index.html">Готово</a>
+  </div>
+  <p class="hint">Свайп влево, чтобы удалить. Новые пункты — только через поле ниже.</p>
+  <div class="list-shell" id="listShell"></div>
+  <form class="composer" id="addForm" autocomplete="off">
+    <input type="text" id="newLine" maxlength="200" placeholder="Новый пункт…" aria-label="New wish item">
+    <button type="submit">Добавить</button>
+  </form>
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEY = "wishlist_blonde_notes_v1";
+  var DELETE_W = 88;
+
+  var DEFAULT_ITEMS = [
+    "Tom Ford Lost Cherry",
+    "Gentle Monster очки",
+    "Onitsuka Tiger розовые",
+    "YSL сумка",
+    "LV коллаба",
+    "MM6 Glam Slam",
+    "Paragliding",
+    "Porsche 911 😭",
+    "Apple Watch 💕",
+    "Шпиц 🐶",
+    "Chanel flap bag",
+    "Alo yoga костюм",
+    "Vivienne Westwood",
+    "F1 мерч",
+    "Квест 💀"
+  ];
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return DEFAULT_ITEMS.slice();
+      var a = JSON.parse(raw);
+      if (!Array.isArray(a)) return DEFAULT_ITEMS.slice();
+      var out = [];
+      for (var i = 0; i < a.length; i++) {
+        if (typeof a[i] === "string" && a[i].trim()) out.push(a[i].trim());
+      }
+      return out.length ? out : DEFAULT_ITEMS.slice();
+    } catch (e) {
+      return DEFAULT_ITEMS.slice();
+    }
+  }
+
+  function save(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+
+  var items = load();
+  var shell = document.getElementById("listShell");
+  var form = document.getElementById("addForm");
+  var input = document.getElementById("newLine");
+
+  function clamp(n, lo, hi) {
+    return Math.max(lo, Math.min(hi, n));
+  }
+
+  function closeAllExcept(skipEl) {
+    var panels = shell.querySelectorAll(".swipe-panel");
+    for (var i = 0; i < panels.length; i++) {
+      if (panels[i] === skipEl) continue;
+      panels[i].style.transition = "transform 0.22s ease";
+      panels[i].style.transform = "translateX(0)";
+    }
+  }
+
+  function render() {
+    shell.innerHTML = "";
+    if (!items.length) {
+      var e = document.createElement("div");
+      e.className = "empty";
+      e.textContent = "Список пуст — добавь первый пункт.";
+      shell.appendChild(e);
+      return;
+    }
+    for (var i = 0; i < items.length; i++) {
+      (function (index) {
+        var host = document.createElement("div");
+        host.className = "swipe-host";
+
+        var row = document.createElement("div");
+        row.className = "swipe-row";
+
+        var delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "swipe-delete";
+        delBtn.textContent = "Удалить";
+
+        var panel = document.createElement("div");
+        panel.className = "swipe-panel";
+
+        var txt = document.createElement("div");
+        txt.className = "swipe-text";
+        txt.textContent = items[index];
+
+        panel.appendChild(txt);
+        row.appendChild(delBtn);
+        row.appendChild(panel);
+
+        var x0 = 0;
+        var open = false;
+
+        function setX(dx) {
+          var v = clamp(dx, -DELETE_W, 0);
+          panel.style.transition = "none";
+          panel.style.transform = "translateX(" + v + "px)";
+        }
+
+        function snap(dx) {
+          panel.style.transition = "transform 0.22s ease";
+          if (dx < -DELETE_W * 0.35) {
+            panel.style.transform = "translateX(-" + DELETE_W + "px)";
+            open = true;
+          } else {
+            panel.style.transform = "translateX(0)";
+            open = false;
+          }
+        }
+
+        delBtn.addEventListener("click", function () {
+          items.splice(index, 1);
+          save(items);
+          render();
+        });
+
+        var startX = 0;
+        var cur = 0;
+        var tracking = false;
+
+        panel.addEventListener("pointerdown", function (ev) {
+          if (ev.button !== undefined && ev.button !== 0) return;
+          tracking = true;
+          panel.setPointerCapture(ev.pointerId);
+          startX = ev.clientX;
+          cur = open ? -DELETE_W : 0;
+          closeAllExcept(panel);
+          panel.style.transition = "none";
+        });
+
+        panel.addEventListener("pointermove", function (ev) {
+          if (!tracking) return;
+          var dx = ev.clientX - startX + cur;
+          setX(dx);
+        });
+
+        panel.addEventListener("pointerup", function (ev) {
+          if (!tracking) return;
+          tracking = false;
+          try { panel.releasePointerCapture(ev.pointerId); } catch (err) {}
+          var dx = ev.clientX - startX + cur;
+          snap(dx);
+        });
+
+        panel.addEventListener("pointercancel", function () {
+          tracking = false;
+          snap(open ? -DELETE_W : 0);
+        });
+
+        host.appendChild(row);
+        shell.appendChild(host);
+      })(i);
+    }
+  }
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var v = input.value.trim();
+    if (!v) return;
+    items.push(v);
+    save(items);
+    input.value = "";
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
