@@ -68,6 +68,25 @@
 
   .back a:hover { border-bottom-color: rgba(120, 220, 255, 0.85); }
 
+  .edit-wish {
+    margin: 10px 0 0;
+    text-align: center;
+    font-size: clamp(0.78rem, 2.9vw, 0.88rem);
+  }
+
+  .edit-wish a {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+    color: #0a0c10;
+    text-decoration: none;
+    background: linear-gradient(120deg, #5cffe8 0%, #7ecbff 100%);
+    box-shadow: 0 4px 14px rgba(0, 245, 255, 0.2);
+  }
+
+  .edit-wish a:hover { filter: brightness(1.06); }
+
   /* Dark glass panel (same family as index.html glass) */
   .glass {
     position: relative;
@@ -268,6 +287,7 @@
     <p class="back"><a href="../index.html">← Блондинка Wish Casino</a></p>
     <h1>vikegart — гараж</h1>
     <p class="sub">Пиксельный гараж, Corvette C7 и неон. Ниже — подарки со ссылками.</p>
+    <p class="edit-wish"><a href="../garage-wishlist-edit.html">Редактировать вишлист</a></p>
   </header>
 
   <div class="hero" aria-label="Пиксельная сцена: гараж и спорткар">
@@ -334,194 +354,128 @@
   </div>
 
   <div class="glass">
-    <div class="wish-grid">
-
-      <div class="gift" style="cursor: default;">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#2a2420"/>
-            <circle cx="6" cy="6" r="5" fill="#c45c38"/>
-            <circle cx="6" cy="6" r="4" fill="#1a1814"/>
-            <rect x="2" y="5" width="1" height="1" fill="#555"/>
-            <rect x="5" y="3" width="1" height="1" fill="#555"/>
-            <rect x="8" y="6" width="1" height="1" fill="#555"/>
-            <rect x="4" y="8" width="1" height="1" fill="#555"/>
-            <rect x="7" y="4" width="1" height="1" fill="#555"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Airless basketball</p>
-          <p class="gift-note">Мяч без накачки, «в дырочках» — Wilson Airless Gen1. Официальный Wilson; при неудобной доставке — StockX/eBay с осторожностью.</p>
-          <div class="gift-dual">
-            <a href="https://www.wilson.com/en-us/basketball/basketballs/airless-balls" target="_blank" rel="noopener noreferrer">Wilson — категория Airless</a>
-            <a href="https://www.wilson.com/en-us/product/airless-gen1-bskt-black-wz1016103idv" target="_blank" rel="noopener noreferrer">Конкретный SKU Gen1</a>
-          </div>
-        </span>
-      </div>
-
-      <a class="gift" href="https://race-place.ru/drugie-uslugi/sportivnyij-karting/" target="_blank" rel="noopener noreferrer">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#1a2228"/>
-            <rect x="1" y="6" width="10" height="4" fill="#333"/>
-            <rect x="2" y="5" width="8" height="3" fill="#e02020"/>
-            <rect x="3" y="4" width="2" height="2" fill="#111"/>
-            <rect x="7" y="4" width="2" height="2" fill="#111"/>
-            <rect x="4" y="7" width="4" height="1" fill="#ffd54a"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Картинг KZ / KZ2</p>
-          <p class="gift-note"><strong>Важно:</strong> KZ/KZ2 — проф. класс, не прокат на 9 л.с. Часто это трек-дни и команды. Старт — Race Place; уточняй КЗ у картодромов соревновательного уровня.</p>
-        </span>
-      </a>
-
-      <div class="gift" style="cursor: default;">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#222"/>
-            <rect x="2" y="5" width="8" height="4" fill="#2a2a2a"/>
-            <rect x="1" y="6" width="10" height="2" fill="#444"/>
-            <path d="M3 8 L6 4 L9 8 Z" fill="#ff9800"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Один урок дрифта</p>
-          <p class="gift-note">Подарочный сертификат — выбери минимальный пакет (одно занятие), не обязательно полный курс.</p>
-          <div class="gift-dual">
-            <a href="https://kultura-zanosa.ru/msk/certificate" target="_blank" rel="noopener noreferrer">Культура заноса — сертификаты</a>
-            <a href="https://ultimate-drift.ru/certificate/" target="_blank" rel="noopener noreferrer">Ultimate Drift — сертификат</a>
-          </div>
-        </span>
-      </div>
-
-      <a class="gift" href="https://dbrand.com/search?brands=apple&deviceTypes=laptops&productTypes=skins&sort=new" target="_blank" rel="noopener noreferrer">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#333"/>
-            <rect x="2" y="2" width="8" height="6" rx="1" fill="#111"/>
-            <rect x="3" y="3" width="6" height="4" fill="#e040fb"/>
-            <rect x="4" y="8" width="4" height="1" fill="#666"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Оклейка MacBook (dbrand)</p>
-          <p class="gift-note">Стильный скин на MacBook — dbrand или аналог по вкусу дарящего. В каталоге выбери свою модель года.</p>
-        </span>
-      </a>
-
-      <div class="gift" style="cursor: default;">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#1a2030"/>
-            <rect x="2" y="5" width="8" height="5" fill="#2c3c55"/>
-            <rect x="3" y="4" width="2" height="2" fill="#4fc3f7"/>
-            <rect x="7" y="4" width="2" height="2" fill="#4fc3f7"/>
-            <rect x="5" y="7" width="2" height="1" fill="#90caf9"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Timekettle W4 Pro (перевод)</p>
-          <p class="gift-note"><strong>Не фейк:</strong> оригинал — бренд Timekettle и приложение Timekettle; цена уровня топ-переводчиков. Дешёвые «W4» без их экосистемы — часто другая электроника.</p>
-          <div class="gift-dual">
-            <a href="https://www.timekettle.co/products/w4-pro-ai-interpreter-earbuds-2026" target="_blank" rel="noopener noreferrer">Официальный Timekettle W4 Pro</a>
-            <a href="https://www.amazon.com/Timekettle-Translator-Bidirectional-Translation-Noise-Canceling/dp/B0F8VDW638" target="_blank" rel="noopener noreferrer">Amazon — проверь продавца</a>
-          </div>
-        </span>
-      </div>
-
-      <a class="gift" href="https://tankmarshrut.com/uslugi/strelba" target="_blank" rel="noopener noreferrer">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#2a2218"/>
-            <rect x="1" y="6" width="10" height="3" fill="#3e3428"/>
-            <rect x="0" y="5" width="4" height="2" fill="#555"/>
-            <rect x="8" y="5" width="4" height="2" fill="#555"/>
-            <rect x="5" y="3" width="2" height="5" fill="#1a1a1a"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Стрельба: пулемёт / снайперка</p>
-          <p class="gift-note">Формат и патроны — только по правилам площадки (часто холостые/имитация на полигоне). Уточни у организатора перед покупкой сертификата.</p>
-        </span>
-      </a>
-
-      <div class="gift" style="cursor: default; border-style: dashed;">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#0a1828"/>
-            <rect x="2" y="3" width="8" height="6" fill="#1565c0"/>
-            <rect x="4" y="5" width="4" height="2" fill="#4dd0e1"/>
-            <rect x="5" y="9" width="2" height="2" fill="#90a4ae"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Под водой: субмарина / глайдер</p>
-          <p class="gift-note">Туристический «суб» часто = мини-суб или шлем-тур. Два варианта ниже — выбери регион.</p>
-          <div class="gift-dual">
-            <a href="https://discoverycove.com/orlando/upgrades/seaventure/" target="_blank" rel="noopener noreferrer">SeaVenture (Discovery Cove)</a>
-            <a href="https://www.keywestsnorkelingtours.com/mini-sub-underwater-adventure/" target="_blank" rel="noopener noreferrer">Mini Sub (Key West)</a>
-          </div>
-        </span>
-      </div>
-
-      <div class="gift" style="cursor: default;">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#111"/>
-            <rect x="4" y="2" width="4" height="8" rx="1" fill="#222"/>
-            <rect x="5" y="4" width="2" height="4" fill="#00e676"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Whoop — последняя версия</p>
-          <p class="gift-note">Актуальная линейка на дату покупки: Whoop 5.0 и Whoop MG — сравни комплектацию на официальном сайте.</p>
-          <div class="gift-dual">
-            <a href="https://www.whoop.com/us/en/thelocker/introducing-whoop-5-0-and-whoop-mg/" target="_blank" rel="noopener noreferrer">Анонс Whoop 5.0 / MG</a>
-            <a href="https://join.whoop.com/us/en/" target="_blank" rel="noopener noreferrer">Join Whoop (оформление)</a>
-          </div>
-        </span>
-      </div>
-
-      <div class="gift" style="cursor: default;">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#222"/>
-            <ellipse cx="6" cy="7" rx="5" ry="3" fill="#1a1a1a"/>
-            <rect x="2" y="4" width="8" height="2" fill="#b0bec5" opacity="0.9"/>
-            <rect x="5" y="2" width="2" height="2" fill="#ff5722"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">Стол из слика (шины)</p>
-          <p class="gift-note">Не обязательно F1 — любой гоночный слик / шина в интерьере.</p>
-          <div class="gift-dual">
-            <a href="https://www.etsy.com/listing/1349241391/coffee-table-made-of-racing-tire-slick" target="_blank" rel="noopener noreferrer">Etsy — Pirelli slick table</a>
-            <a href="https://3guniquedecor.com/products/nascar-tire-table-automotive-coffee-table-racing-inspired-furniture" target="_blank" rel="noopener noreferrer">3G Unique Decor — NASCAR tire</a>
-          </div>
-        </span>
-      </div>
-
-      <a class="gift" href="https://www.universalorlando.com/web/en/us/tickets-packages/park-tickets" target="_blank" rel="noopener noreferrer">
-        <span class="gift-pix" aria-hidden="true">
-          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-            <rect width="12" height="12" fill="#1a237e"/>
-            <rect x="2" y="2" width="8" height="6" fill="#3949ab"/>
-            <rect x="3" y="8" width="6" height="2" fill="#ffd600"/>
-            <rect x="5" y="4" width="2" height="2" fill="#fff"/>
-          </svg>
-        </span>
-        <span class="gift-body">
-          <p class="gift-title">День в Universal Studios</p>
-          <p class="gift-note">Официальные билеты Universal Orlando (1-day / park-to-park по желанию). Город парка уточни заранее.</p>
-        </span>
-      </a>
-
-    </div>
+    <div class="wish-grid" id="wishGrid"></div>
   </div>
 
   <p class="foot">Открыто как <code>/vikegart/</code> · с корня редирект: <code>vikegart.html</code></p>
 </div>
+
+<script src="../wishlist-garage-shared.js"></script>
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+
+  var PIX = {
+    "Airless basketball": '<rect width="12" height="12" fill="#2a2420"/><circle cx="6" cy="6" r="5" fill="#c45c38"/><circle cx="6" cy="6" r="4" fill="#1a1814"/><rect x="2" y="5" width="1" height="1" fill="#555"/><rect x="5" y="3" width="1" height="1" fill="#555"/><rect x="8" y="6" width="1" height="1" fill="#555"/><rect x="4" y="8" width="1" height="1" fill="#555"/><rect x="7" y="4" width="1" height="1" fill="#555"/>',
+    "Картинг KZ / KZ2": '<rect width="12" height="12" fill="#1a2228"/><rect x="1" y="6" width="10" height="4" fill="#333"/><rect x="2" y="5" width="8" height="3" fill="#e02020"/><rect x="3" y="4" width="2" height="2" fill="#111"/><rect x="7" y="4" width="2" height="2" fill="#111"/><rect x="4" y="7" width="4" height="1" fill="#ffd54a"/>',
+    "Один урок дрифта": '<rect width="12" height="12" fill="#222"/><rect x="2" y="5" width="8" height="4" fill="#2a2a2a"/><rect x="1" y="6" width="10" height="2" fill="#444"/><path d="M3 8 L6 4 L9 8 Z" fill="#ff9800"/>',
+    "Оклейка MacBook (dbrand)": '<rect width="12" height="12" fill="#333"/><rect x="2" y="2" width="8" height="6" rx="1" fill="#111"/><rect x="3" y="3" width="6" height="4" fill="#e040fb"/><rect x="4" y="8" width="4" height="1" fill="#666"/>',
+    "Timekettle W4 Pro (перевод)": '<rect width="12" height="12" fill="#1a2030"/><rect x="2" y="5" width="8" height="5" fill="#2c3c55"/><rect x="3" y="4" width="2" height="2" fill="#4fc3f7"/><rect x="7" y="4" width="2" height="2" fill="#4fc3f7"/><rect x="5" y="7" width="2" height="1" fill="#90caf9"/>',
+    "Стрельба: пулемёт / снайперка": '<rect width="12" height="12" fill="#2a2218"/><rect x="1" y="6" width="10" height="3" fill="#3e3428"/><rect x="0" y="5" width="4" height="2" fill="#555"/><rect x="8" y="5" width="4" height="2" fill="#555"/><rect x="5" y="3" width="2" height="5" fill="#1a1a1a"/>',
+    "Под водой: субмарина / глайдер": '<rect width="12" height="12" fill="#0a1828"/><rect x="2" y="3" width="8" height="6" fill="#1565c0"/><rect x="4" y="5" width="4" height="2" fill="#4dd0e1"/><rect x="5" y="9" width="2" height="2" fill="#90a4ae"/>',
+    "Whoop — последняя версия": '<rect width="12" height="12" fill="#111"/><rect x="4" y="2" width="4" height="8" rx="1" fill="#222"/><rect x="5" y="4" width="2" height="4" fill="#00e676"/>',
+    "Стол из слика (шины)": '<rect width="12" height="12" fill="#222"/><ellipse cx="6" cy="7" rx="5" ry="3" fill="#1a1a1a"/><rect x="2" y="4" width="8" height="2" fill="#b0bec5" opacity="0.9"/><rect x="5" y="2" width="2" height="2" fill="#ff5722"/>',
+    "День в Universal Studios": '<rect width="12" height="12" fill="#1a237e"/><rect x="2" y="2" width="8" height="6" fill="#3949ab"/><rect x="3" y="8" width="6" height="2" fill="#ffd600"/><rect x="5" y="4" width="2" height="2" fill="#fff"/>'
+  };
+
+  var PIX_DEFAULT = '<rect width="12" height="12" fill="#252b36"/><rect x="2" y="3" width="8" height="6" fill="#3a4558"/><rect x="4" y="5" width="4" height="2" fill="#7ecbff"/>';
+
+  function svgForTitle(title) {
+    var inner = PIX[title] || PIX_DEFAULT;
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 12 12");
+    svg.innerHTML = inner;
+    return svg;
+  }
+
+  function el(name, cls, html) {
+    var n = document.createElement(name);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+
+  function renderNote(entry) {
+    var p = el("p", "gift-note");
+    if (entry.notePrefix && entry.note) {
+      var strong = document.createElement("strong");
+      strong.textContent = entry.notePrefix + ":";
+      p.appendChild(strong);
+      p.appendChild(document.createTextNode(" " + entry.note));
+    } else if (entry.note) {
+      p.textContent = entry.note;
+    }
+    return p;
+  }
+
+  function renderLinks(entry) {
+    if (entry.links && entry.links.length) {
+      var wrap = el("div", "gift-dual");
+      for (var i = 0; i < entry.links.length; i++) {
+        var L = entry.links[i];
+        var a = el("a");
+        a.href = L.href;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = L.label;
+        wrap.appendChild(a);
+      }
+      return wrap;
+    }
+    return null;
+  }
+
+  function buildCard(entry) {
+    var title = entry.title || "";
+    var href = entry.href;
+    var isLink = !!href;
+    var root = isLink ? el("a", "gift") : el("div", "gift");
+    if (isLink) {
+      root.href = href;
+      root.target = "_blank";
+      root.rel = "noopener noreferrer";
+    } else {
+      root.style.cursor = "default";
+    }
+    if (entry.dashed) root.style.borderStyle = "dashed";
+
+    var pixWrap = el("span", "gift-pix");
+    pixWrap.setAttribute("aria-hidden", "true");
+    pixWrap.appendChild(svgForTitle(title));
+
+    var body = el("span", "gift-body");
+    var t = el("p", "gift-title");
+    t.textContent = title;
+    body.appendChild(t);
+
+    var noteEl = renderNote(entry);
+    if (noteEl && (noteEl.textContent || noteEl.childNodes.length)) body.appendChild(noteEl);
+
+    var linksEl = renderLinks(entry);
+    if (linksEl) body.appendChild(linksEl);
+
+    root.appendChild(pixWrap);
+    root.appendChild(body);
+    return root;
+  }
+
+  function refresh() {
+    var grid = document.getElementById("wishGrid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    var list = loadGarageWishlist();
+    for (var i = 0; i < list.length; i++) {
+      grid.appendChild(buildCard(list[i]));
+    }
+  }
+
+  refresh();
+  window.addEventListener("storage", function (ev) {
+    if (ev.key === GARAGE_WISHLIST_STORAGE_KEY) refresh();
+  });
+  window.addEventListener("focus", refresh);
+})();
+</script>
 
 </body>
 </html>
